@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var audioPlayer: AVAudioPlayer?
     @State private var scannedUID: String = ""
     @State private var audioName: String = ""
-    @State private var testMessage: String = "" // Add this line
+    @State private var testMessage: String = ""
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \RecordedAudio.uid, ascending: true)],
@@ -57,18 +57,25 @@ struct ContentView: View {
         Group {
             if showSaveMessage {
                 Text("Recording Saved")
+                    .font(.title)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(12)
                     .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.showSaveMessage = false
                     }
                 }
             }
-            
-            if showRecordMessage{
+            if showRecordMessage && !showSaveMessage{
                 Text(recordingMessage)
-                    .foregroundColor(Color.purple)
+                    .font(.title)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(12)
             }
         }
+        
     }
 
     private var actionButtons: some View {
@@ -107,9 +114,28 @@ struct ContentView: View {
         recordedAudios.first { $0.uid == uid }
     }
     
+    // Function to ensure a UID is scanned before proceeding
+    private func ensureScannedUIDExists() -> Bool {
+        if !scannedUID.isEmpty {
+            return true
+        } else {
+            self.testMessage = "No tag detected, please touch an EchoTag first" // Update here
+            return false
+        }
+    }
+    
+    private func ensureScannedAudioExists() -> Bool {
+        if !audioName.isEmpty {
+            return true
+        } else {
+            self.testMessage = "No audio for this EchoTag, please record" // Update here
+            return false
+        }
+    }
+    
     func recordButtonTapped() {
         showRecordMessage = true
-
+        guard ensureScannedUIDExists() else { return }
         if isRecording {
             audioRecorderManager.stopRecording()
             isRecording = false
@@ -129,15 +155,29 @@ struct ContentView: View {
 
     
     func saveButtonTapped() {
-        self.testMessage = "Saving..."
+        guard ensureScannedUIDExists() else { return }
+        let uniqueFileName = generateUniqueFileName()
+        audioName = uniqueFileName
+        self.testMessage = "Save as \(uniqueFileName)" // Update here
+
+        audioRecorderManager.saveRecording(to: getDocumentsDirectory(), withName: uniqueFileName)
+        saveUIDAndAudioFilename(scannedUID, filename: uniqueFileName)
+
+        showSaveButton = false
+        showSaveMessage = true
     }
     
     func getDocumentsDirectory() -> URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 
+    func generateUniqueFileName() -> String {
+        let timestamp = Date().timeIntervalSince1970
+        return "recording_\(timestamp).m4a"
+    }
 
     func playButtonTapped() {
+        guard ensureScannedUIDExists() else { return }
         playRecording()
     }
 
@@ -146,6 +186,7 @@ struct ContentView: View {
         if showSaveButton {
             audioFilename = audioRecorderManager.tempAudioFilename
         } else {
+            guard ensureScannedAudioExists() else { return }
             audioFilename = getDocumentsDirectory().appendingPathComponent(audioName)
         }
 
@@ -167,11 +208,32 @@ struct ContentView: View {
     }
 
     func deleteButtonTapped() {
-        self.testMessage = "deleting..."
+        guard ensureScannedUIDExists() else { return }
+        guard ensureScannedAudioExists() else { return }
+        self.testMessage = "Delete" // Update here
+        if let existingEntity = recordedAudios.first(where: { $0.uid == scannedUID }) {
+            viewContext.delete(existingEntity)
+        }
+        scannedUID = ""
+        audioName = ""
     }
     
 
-    func saveUIDAndAudioFilename(_ uid: String, filename: String) {}
+    func saveUIDAndAudioFilename(_ uid: String, filename: String) {
+        if let existingEntity = recordedAudios.first(where: { $0.uid == uid }) {
+            viewContext.delete(existingEntity)
+        }
+        
+        let newRecording = RecordedAudio(context: viewContext)
+        newRecording.uid = uid
+        newRecording.audioFilename = filename
+
+        do {
+            try viewContext.save()
+        } catch {
+            self.testMessage = "Error saving context: \(error.localizedDescription)" // Update here
+        }
+    }
 }
 
 // If you have a Preview provider, it remains as it is.
