@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var audioPlayer: AVAudioPlayer?
     @State private var scannedUID: String = ""
     @State private var audioName: String = ""
-    @State private var testMessage: String = "" // Add this line
+    @State private var testMessage: String = ""
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \RecordedAudio.uid, ascending: true)],
@@ -57,18 +57,25 @@ struct ContentView: View {
         Group {
             if showSaveMessage {
                 Text("Recording Saved")
+                    .font(.title)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(12)
                     .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.showSaveMessage = false
                     }
                 }
             }
-            
-            if showRecordMessage{
+            if showRecordMessage && !showSaveMessage{
                 Text(recordingMessage)
-                    .foregroundColor(Color.purple)
+                    .font(.title)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(12)
             }
         }
+        
     }
 
     private var actionButtons: some View {
