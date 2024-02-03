@@ -22,6 +22,7 @@ struct ContentView: View {
     @State private var scannedUID: String = ""
     @State private var audioName: String = ""
     @State private var testMessage: String = ""
+    @State var nfcManager = NFCManager()
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \RecordedAudio.uid, ascending: true)],
@@ -34,8 +35,9 @@ struct ContentView: View {
             Spacer()
             messageDisplay
             actionButtons
-            Text(testMessage)
-                .foregroundColor(.red)
+// comment out the message for test uses
+//            Text(testMessage)
+//                .foregroundColor(.red)
         }
         .padding()
     }
@@ -104,10 +106,30 @@ struct ContentView: View {
     // Functions for button actions
     func scanButtonTapped() {
         self.testMessage = "Scan trigger"
-        self.scannedUID = "Test123"
+        nfcManager.scan(uid: self.scannedUID) // This will be empty for new tags
+        nfcManager.onNFCResult = { result in
+            switch result {
+            case .success(let uid):
+                self.scannedUID = uid
+                self.testMessage = "Scan successful, UID: \(uid)"
+                self.handleScannedUID(uid)
+            case .failure(let error):
+                self.testMessage = "Scan failed: \(error.localizedDescription)"
+            }
+        }
             
     }
 
+
+    private func handleScannedUID(_ uid: String) {
+        if let audio = findAudioByUID(uid) {
+            self.testMessage = "uid：\(uid) Found this tag" // Update here
+            audioName = audio.audioFilename ?? ""
+            playButtonTapped()
+        } else {
+            self.testMessage = "uid：\(uid) No record for this tag" // Update here
+        }
+    }
     
     // Core Data Interaction
     func findAudioByUID(_ uid: String) -> RecordedAudio? {
@@ -124,6 +146,7 @@ struct ContentView: View {
         }
     }
     
+    // Function to ensure a UID is scanned before proceeding
     private func ensureScannedAudioExists() -> Bool {
         if !audioName.isEmpty {
             return true
