@@ -12,7 +12,8 @@
 		42D88E142B6EC85600D15E10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D88E132B6EC85600D15E10 /* Assets.xcassets */; };
 		42D88E172B6EC85600D15E10 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D88E162B6EC85600D15E10 /* Preview Assets.xcassets */; };
 		42D88E192B6EC85600D15E10 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D88E182B6EC85600D15E10 /* Persistence.swift */; };
-		42D88E1C2B6EC85600D15E10 /* EchoAid.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 42D88E1A2B6EC85600D15E10 /* EchoAid.xcdatamodeld */; };
+		42D88E232B6ECA1A00D15E10 /* AVAudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D88E222B6ECA1A00D15E10 /* AVAudioRecorder.swift */; };
+		42D88E2A2B6ECE1C00D15E10 /* EchoAid.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 42D88E282B6ECE1C00D15E10 /* EchoAid.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,7 +23,8 @@
 		42D88E132B6EC85600D15E10 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42D88E162B6EC85600D15E10 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		42D88E182B6EC85600D15E10 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		42D88E1B2B6EC85600D15E10 /* EchoAid.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EchoAid.xcdatamodel; sourceTree = "<group>"; };
+		42D88E222B6ECA1A00D15E10 /* AVAudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioRecorder.swift; sourceTree = "<group>"; };
+		42D88E292B6ECE1C00D15E10 /* EchoAid.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EchoAid.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,11 +57,12 @@
 		42D88E0E2B6EC85400D15E10 /* EchoAid */ = {
 			isa = PBXGroup;
 			children = (
+				42D88E222B6ECA1A00D15E10 /* AVAudioRecorder.swift */,
 				42D88E0F2B6EC85400D15E10 /* EchoAidApp.swift */,
 				42D88E112B6EC85400D15E10 /* ContentView.swift */,
 				42D88E132B6EC85600D15E10 /* Assets.xcassets */,
 				42D88E182B6EC85600D15E10 /* Persistence.swift */,
-				42D88E1A2B6EC85600D15E10 /* EchoAid.xcdatamodeld */,
+				42D88E282B6ECE1C00D15E10 /* EchoAid.xcdatamodeld */,
 				42D88E152B6EC85600D15E10 /* Preview Content */,
 			);
 			path = EchoAid;
@@ -144,9 +147,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				42D88E192B6EC85600D15E10 /* Persistence.swift in Sources */,
-				42D88E1C2B6EC85600D15E10 /* EchoAid.xcdatamodeld in Sources */,
+				42D88E232B6ECA1A00D15E10 /* AVAudioRecorder.swift in Sources */,
 				42D88E122B6EC85400D15E10 /* ContentView.swift in Sources */,
 				42D88E102B6EC85400D15E10 /* EchoAidApp.swift in Sources */,
+				42D88E2A2B6ECE1C00D15E10 /* EchoAid.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,12 +358,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		42D88E1A2B6EC85600D15E10 /* EchoAid.xcdatamodeld */ = {
+		42D88E282B6ECE1C00D15E10 /* EchoAid.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				42D88E1B2B6EC85600D15E10 /* EchoAid.xcdatamodel */,
+				42D88E292B6ECE1C00D15E10 /* EchoAid.xcdatamodel */,
 			);
-			currentVersion = 42D88E1B2B6EC85600D15E10 /* EchoAid.xcdatamodel */;
+			currentVersion = 42D88E292B6ECE1C00D15E10 /* EchoAid.xcdatamodel */;
 			path = EchoAid.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

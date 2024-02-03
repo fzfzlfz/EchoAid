@@ -6,13 +6,27 @@
 //
 
 import SwiftUI
+import AVFoundation
 import CoreData
 
 struct ContentView: View {
+    let audioRecorderManager = AudioRecorderManager()
+    
     @Environment(\.managedObjectContext) private var viewContext
-    @State private var showSaveButton = false // Example state variable, adjust logic as needed
-    @State private var isRecording = false // Example state variable, adjust logic as needed
-    @State private var messageText = "Welcome to EchoTag!" // Example message text
+    @State private var isRecording = false
+    @State private var showSaveButton = false
+    @State private var showSaveMessage = false
+    @State private var showRecordMessage = false
+    @State private var recordingMessage: String = ""
+    @State private var audioPlayer: AVAudioPlayer?
+    @State private var scannedUID: String = ""
+    @State private var audioName: String = ""
+    @State private var testMessage: String = "" // Add this line
+
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \RecordedAudio.uid, ascending: true)],
+        animation: .default)
+    private var recordedAudios: FetchedResults<RecordedAudio>
 
     var body: some View {
         VStack {
@@ -20,6 +34,8 @@ struct ContentView: View {
             Spacer()
             messageDisplay
             actionButtons
+            Text(testMessage)
+                .foregroundColor(.red)
         }
         .padding()
     }
@@ -38,11 +54,21 @@ struct ContentView: View {
     }
 
     private var messageDisplay: some View {
-        Text(messageText)
-            .font(.title)
-            .padding()
-            .background(Color.gray.opacity(0.2))
-            .cornerRadius(12)
+        Group {
+            if showSaveMessage {
+                Text("Recording Saved")
+                    .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        self.showSaveMessage = false
+                    }
+                }
+            }
+            
+            if showRecordMessage{
+                Text(recordingMessage)
+                    .foregroundColor(Color.purple)
+            }
+        }
     }
 
     private var actionButtons: some View {
@@ -55,49 +81,100 @@ struct ContentView: View {
             actionButton(title: "Delete", color: .red, action: deleteButtonTapped)
         }
     }
-    
+
     private func actionButton(title: String, color: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(title)
-                .frame(minWidth: 100, maxWidth: .infinity)
+                .fontWeight(.semibold)
+                .frame(minWidth: 0, maxWidth: .infinity)
                 .padding()
                 .background(color)
                 .foregroundColor(.white)
-                .cornerRadius(10)
+                .cornerRadius(40)
         }
     }
 
-    // Action methods
-    private func scanButtonTapped() {
-        // Implement scanning logic here
-        messageText = "Scanning..."
+    // Functions for button actions
+    func scanButtonTapped() {
+        self.testMessage = "Scan trigger"
+        self.scannedUID = "Test123"
+            
     }
 
-    private func saveButtonTapped() {
-        // Implement save logic here
-        messageText = "Saving..."
+    
+    // Core Data Interaction
+    func findAudioByUID(_ uid: String) -> RecordedAudio? {
+        recordedAudios.first { $0.uid == uid }
+    }
+    
+    func recordButtonTapped() {
+        showRecordMessage = true
+
+        if isRecording {
+            audioRecorderManager.stopRecording()
+            isRecording = false
+            showSaveButton = true
+            recordingMessage = "Recording stopped."
+            self.testMessage = recordingMessage // Update here
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.showRecordMessage = false
+            }
+        } else {
+            recordingMessage = "Recording started..."
+            self.testMessage = recordingMessage // Update here
+            audioRecorderManager.startRecording()
+            isRecording = true
+        }
     }
 
-    private func recordButtonTapped() {
-        isRecording.toggle() // Example toggle logic
-        messageText = isRecording ? "Recording..." : "Stopped recording."
+    
+    func saveButtonTapped() {
+        self.testMessage = "Saving..."
+    }
+    
+    func getDocumentsDirectory() -> URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 
-    private func playButtonTapped() {
-        // Implement play logic here
-        messageText = "Playing..."
+
+    func playButtonTapped() {
+        playRecording()
     }
 
-    private func deleteButtonTapped() {
-        // Implement delete logic here
-        messageText = "Deleted..."
+    func playRecording() {
+        let audioFilename: URL
+        if showSaveButton {
+            audioFilename = audioRecorderManager.tempAudioFilename
+        } else {
+            audioFilename = getDocumentsDirectory().appendingPathComponent(audioName)
+        }
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: audioFilename)
+            guard let player = audioPlayer else {
+                self.testMessage = "Failed to initialize AVAudioPlayer" // Update here
+                return
+            }
+
+            if player.prepareToPlay() {
+                player.play()
+            } else {
+                self.testMessage = "Player is not ready to play audio" // Update here
+            }
+        } catch {
+            self.testMessage = "Could not load file for playback: \(error.localizedDescription)" // Update here
+        }
     }
+
+    func deleteButtonTapped() {
+        self.testMessage = "deleting..."
+    }
+    
+
+    func saveUIDAndAudioFilename(_ uid: String, filename: String) {}
 }
 
-// Example preview provider with a placeholder PersistenceController
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
+// If you have a Preview provider, it remains as it is.
+#Preview {
+    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
-
