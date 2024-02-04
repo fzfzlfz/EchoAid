@@ -10,9 +10,15 @@ import CoreNFC
 class NFCManager: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate {
     var uid = ""
     var nfcSession: NFCNDEFReaderSession?
-    
+    var isSessionActive = false // Flag to track session activity
 
     func scan(uid: String) {
+        guard !isSessionActive else {
+            print("A session is already active. Please wait until it completes.")
+            return
+        }
+
+        isSessionActive = true
         print("scan(uid:) called with uid: \(uid)")
         let uniqueUID = uid.isEmpty ? UUID().uuidString : uid
         self.uid = uniqueUID
@@ -22,6 +28,15 @@ class NFCManager: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate {
         nfcSession?.begin()
         print("after begin")
     }
+
+    // Implement the delegate methods and ensure isSessionActive is set to false when the session ends
+    func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
+        isSessionActive = false
+        DispatchQueue.main.async {
+            self.onNFCResult?(.failure(error))
+        }
+    }
+    
 
     func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
         
@@ -128,12 +143,5 @@ class NFCManager: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate {
     
     // Make sure to define onNFCResult as a closure property in NFCManager:
     var onNFCResult: ((Result<String, Error>) -> Void)?
-
-    // And handle the error case in the same delegate method:
-    func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
-        DispatchQueue.main.async {
-            self.onNFCResult?(.failure(error))
-        }
-    }
 
 }
