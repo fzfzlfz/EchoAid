@@ -3,9 +3,27 @@
 //  EchoAid
 //
 //  Created by fzfzlfz on 2/3/24.
-//
+//  Updated by chewyuenrachael on 2/4/24
 
 import AVFoundation
+
+// Define a custom error type
+enum AudioRecorderError: Error {
+    case sessionSetupFailed(String)
+    case recordingFailed(String)
+    case saveFailed(String)
+    case encodingFailed(String)
+    
+    var localizedDescription: String {
+        switch self {
+        case .sessionSetupFailed(let message),
+             .recordingFailed(let message),
+             .saveFailed(let message),
+             .encodingFailed(let message):
+            return message
+        }
+    }
+}
 
 class AudioRecorderManager: NSObject, AVAudioRecorderDelegate {
     var audioRecorder: AVAudioRecorder?
