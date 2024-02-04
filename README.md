@@ -39,6 +39,10 @@ Before you begin, ensure you have the following installed:
    - Connect your iOS device via USB or select a simulator.
    - Select your device from the list of available devices in the toolbar.
    - Press the Run button (▶) or use the `Cmd + R` shortcut to build and run the application on your device or simulator.
+  
+Tip: to test the NFC feature, you should ensure the following two things 
+- an apple developer account so that your Xcode can support NFC capability
+- NFC feature is only supported on real device so connect your iOS device via USB or select a simulator.
 
 ## Exploring the Project
 
