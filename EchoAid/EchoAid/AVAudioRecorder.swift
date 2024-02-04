@@ -79,19 +79,19 @@ class AudioRecorderManager: NSObject, AVAudioRecorderDelegate {
     }
 
     // Save the recording with a unique filename
-    func saveRecording(to directory: URL, withName name: String, completion: @escaping (Result<URL, Error>) -> Void) {
+    func saveRecording(to directory: URL, withName name: String) {
         let destinationURL = directory.appendingPathComponent(name)
         do {
             if FileManager.default.fileExists(atPath: destinationURL.path) {
                 try FileManager.default.removeItem(at: destinationURL)
             }
             try FileManager.default.moveItem(at: tempAudioFilename, to: destinationURL)
-            completion(.success(destinationURL))
+            print("Recording saved to \(destinationURL).")
         } catch {
-            completion(.failure(AudioRecorderError.saveFailed("Failed to save recording: \(error.localizedDescription)")))
+            print("Failed to save recording: \(error.localizedDescription)")
         }
     }
-
+    
     // Delegate method called when recording is finished
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if flag {

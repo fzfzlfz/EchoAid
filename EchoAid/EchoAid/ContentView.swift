@@ -182,10 +182,8 @@ struct ContentView: View {
         let uniqueFileName = generateUniqueFileName()
         audioName = uniqueFileName
         self.testMessage = "Save as \(uniqueFileName)" // Update here
-
         audioRecorderManager.saveRecording(to: getDocumentsDirectory(), withName: uniqueFileName)
         saveUIDAndAudioFilename(scannedUID, filename: uniqueFileName)
-
         showSaveButton = false
         showSaveMessage = true
     }
