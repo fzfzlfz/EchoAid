@@ -25,7 +25,13 @@ enum AudioRecorderError: Error {
     }
 }
 
+protocol AudioRecorderManagerDelegate: AnyObject {
+    func audioRecorderManager(_ manager: AudioRecorderManager, didFailWithError error: Error)
+    func audioRecorderManagerDidFinishRecordingSuccessfully(_ manager: AudioRecorderManager)
+}
+
 class AudioRecorderManager: NSObject, AVAudioRecorderDelegate {
+    weak var delegate: AudioRecorderManagerDelegate?
     var audioRecorder: AVAudioRecorder?
     let tempAudioFilename = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("temp_recording.m4a")
 
@@ -36,7 +42,9 @@ class AudioRecorderManager: NSObject, AVAudioRecorderDelegate {
             try audioSession.setCategory(.playAndRecord, mode: .default)
             try audioSession.setActive(true)
         } catch {
-            print("Failed to set audio session category: \(error.localizedDescription)")
+            let error = AudioRecorderError.sessionSetupFailed("Failed to set audio session category: \(error.localizedDescription)")
+            delegate?.audioRecorderManager(self, didFailWithError: error)
+            return
         }
     }
 
