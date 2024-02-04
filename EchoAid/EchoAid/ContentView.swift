@@ -9,6 +9,23 @@ import SwiftUI
 import AVFoundation
 import CoreData
 
+// Color extension for HEX colors in SwiftUI
+extension Color {
+    init(hex: String) {
+        let scanner = Scanner(string: hex)
+        scanner.scanLocation = 0
+
+        var rgbValue: UInt64 = 0
+        scanner.scanHexInt64(&rgbValue)
+
+        let r = (rgbValue & 0xff0000) >> 16
+        let g = (rgbValue & 0xff00) >> 8
+        let b = rgbValue & 0xff
+
+        self.init(red: Double(r) / 255.0, green: Double(g) / 255.0, blue: Double(b) / 255.0)
+    }
+}
+
 struct ContentView: View {
     let audioRecorderManager = AudioRecorderManager()
     
@@ -36,22 +53,27 @@ struct ContentView: View {
             messageDisplay
             actionButtons
 // comment out the message for test uses
-//            Text(testMessage)
-//                .foregroundColor(.red)
+            Text(testMessage)
+                .foregroundColor(.red)
         }
         .padding()
+        .background(Color(hex: "70A9A1"))
     }
 
     private var scanButton: some View {
         Button(action: scanButtonTapped) {
-            Image(systemName: "magnifyingglass")
+            Image("Logo")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 140, height: 140)
-                .padding(60)
-                .background(Color.blue)
-                .foregroundColor(.white)
+                .padding(100)
+                .background(Color(hex: "70A9A1"))
+                .foregroundColor(Color(hex: "F6F1D1"))
                 .clipShape(Circle())
+                .overlay(
+                    Circle() 
+                        .stroke(Color(hex: "F6F1D1"), lineWidth: 16)
+                )
         }
     }
 
@@ -60,21 +82,25 @@ struct ContentView: View {
             if showSaveMessage {
                 Text("Recording Saved")
                     .font(.title)
+                    .frame(minWidth: 0, maxWidth: .infinity)
                     .padding()
                     .background(Color.gray.opacity(0.2))
-                    .cornerRadius(12)
+                    .foregroundColor(Color(hex: "F6F1D1"))
+                    .cornerRadius(6)
                     .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.showSaveMessage = false
                     }
                 }
             }
-            if showRecordMessage && !showSaveMessage{
+            if showRecordMessage && !showSaveMessage && recordingMessage != ""{
                 Text(recordingMessage)
                     .font(.title)
+                    .frame(minWidth: 0, maxWidth: .infinity)
                     .padding()
                     .background(Color.gray.opacity(0.2))
-                    .cornerRadius(12)
+                    .foregroundColor(Color(hex: "F6F1D1"))
+                    .cornerRadius(6)
             }
         }
         
@@ -97,15 +123,19 @@ struct ContentView: View {
                 .fontWeight(.semibold)
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .padding()
-                .background(color)
-                .foregroundColor(.white)
-                .cornerRadius(40)
+                .background(Color(hex: "0B2027"))
+                .foregroundColor(Color(hex: "F6F1D1"))
+                .cornerRadius(6)
+            
         }
     }
+    
+    
 
     // Functions for button actions
     func scanButtonTapped() {
         self.testMessage = "Scan trigger"
+        resetStateAndDeleteTemporaryFile()
         nfcManager.scan(uid: self.scannedUID) // This will be empty for new tags
         nfcManager.onNFCResult = { result in
             switch result {
@@ -255,6 +285,29 @@ struct ContentView: View {
             self.testMessage = "Error saving context: \(error.localizedDescription)" // Update here
         }
     }
+    
+    func resetStateAndDeleteTemporaryFile() {
+        print("reset state")
+        // Reset UI state variables
+        showSaveButton = false
+        showSaveMessage = false
+        showRecordMessage = false
+        recordingMessage = ""
+        audioName = ""
+        testMessage = ""
+
+        // Delete the temporary recorded file
+        let tempAudioFilename = audioRecorderManager.tempAudioFilename
+        do {
+            if FileManager.default.fileExists(atPath: tempAudioFilename.path) {
+                try FileManager.default.removeItem(at: tempAudioFilename)
+                print("Temporary file deleted successfully.")
+            }
+        } catch {
+            print("Error deleting temporary file: \(error.localizedDescription)")
+        }
+    }
+
 }
 
 // If you have a Preview provider, it remains as it is.
