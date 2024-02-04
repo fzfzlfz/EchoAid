@@ -71,11 +71,11 @@ Here are EchoAid's main features:
 
 **Scenario 1: Blind User - Marking Medications and Food Items**
 
-Cecilia's independence shines even brighter with EchoAid. Last week, she received two new prescriptions from her doctor, identical to the touch but distinct in purpose. Despite her family being at work, Cecilia navigates this challenge with ease. A gentle tap of her phone against the tags, and she hears, "Antibiotic, take with lunch," clearly distinguishing it from the other. Later, as she prepares her meal, EchoAid guides her again, confirming, "Salad mix, expires on Friday," ensuring her lunch is fresh and healthy. EchoAid not only grants Cecilia the freedom to manage her health independently but also supports her in making informed choices about her diet, all by herself.
+> Cecilia's independence shines even brighter with EchoAid. Last week, she received two new prescriptions from her doctor, identical to the touch but distinct in purpose. Despite her family being at work, Cecilia navigates this challenge with ease. A gentle tap of her phone against the tags, and she hears, "Antibiotic, take with lunch," clearly distinguishing it from the other. Later, as she prepares her meal, EchoAid guides her again, confirming, "Salad mix, expires on Friday," ensuring her lunch is fresh and healthy. EchoAid not only grants Cecilia the freedom to manage her health independently but also supports her in making informed choices about her diet, all by herself.
 
 **Scenario 2: Elderly User with Memory and Vision Impairment**
 
-Mrs. Liu is 68 years old with bad memory and impaired vision. She starts her day with a reminder from her EchoAid app, saying, "Good morning, Mrs. Liu! Time to take your heart medication." She walks to the medicine cabinet, where she finds her medications neatly organized with EchoAid stickers. She picks up the first bottle, and her EchoAid reader, integrated into her smartphone, plays back the message, "Blood pressure pill, take one with breakfast." Relieved, she takes her medication without confusion.
+> Mrs. Liu is 68 years old with bad memory and impaired vision. She starts her day with a reminder from her EchoAid app, saying, "Good morning, Mrs. Liu! Time to take your heart medication." She walks to the medicine cabinet, where she finds her medications neatly organized with EchoAid stickers. She picks up the first bottle, and her EchoAid reader, integrated into her smartphone, plays back the message, "Blood pressure pill, take one with breakfast." Relieved, she takes her medication without confusion.
 
 ## Contributing
 We welcome contributions to EchoAid! Please read our contribution guidelines for more information on how you can contribute to the project.
