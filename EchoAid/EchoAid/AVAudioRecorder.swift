@@ -87,16 +87,18 @@ class AudioRecorderManager: NSObject, AVAudioRecorderDelegate {
     // Delegate method called when recording is finished
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if flag {
-            print("Recording finished successfully.")
+                 delegate?.audioRecorderManagerDidFinishRecordingSuccessfully(self)
         } else {
-            print("Recording finished unsuccessfully.")
+                let error = AudioRecorderError.recordingFailed("Recording finished unsuccessfully.")
+                delegate?.audioRecorderManager(self, didFailWithError: error)
         }
     }
 
     // Delegate method called if an encoding error occurs
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
         if let error = error {
-            print("Encoding error: \(error.localizedDescription)")
+            let recordingError = AudioRecorderError.encodingFailed("Encoding error: \(error.localizedDescription)")
+            delegate?.audioRecorderManager(self, didFailWithError: recordingError)
         }
     }
 }
