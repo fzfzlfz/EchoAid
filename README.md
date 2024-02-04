@@ -9,7 +9,16 @@
 - **Why Use It?** EchoAid is not just a product; it's a lifeline for individuals facing daily challenges due to visual impairments, cognitive difficulties, or age-related issues. By harnessing the power of Near Field Communication (NFC) technology, EchoAid transforms ordinary objects into beacons of independence. It empowers users to navigate their environment with confidence, turning every interaction into an opportunity for self-reliance and dignity.
 
 ## Table of Contents
-- A navigable table of contents to quickly access various sections of the README.
+
+- [Getting Started with EchoAid](#getting-started-with-echoaid)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Exploring the Project](#exploring-the-project)
+- [How It Works](#how-it-works)
+- [User scenarios to apply EchoAid in daily life](#user-scenarios-to-apply-echoaid-in-daily-life)
+- [Contributing](#contributing)
+- [FAQ/Troubleshooting](#faqtroubleshooting)
+- [Acknowledgments](#acknowledgments)
 
 ## Prerequisites
 
@@ -73,7 +82,7 @@ Here are EchoAid's main features:
 
 ## User scenarios to apply EchoAid in daily life:
 
-**Scenario 1: Blind User - Marking Medications and Food Items**
+**Scenario 1: Visually Impaired User - Marking Medications and Food Items**
 
 > Cecilia's independence shines even brighter with EchoAid. Last week, she received two new prescriptions from her doctor, identical to the touch but distinct in purpose. Despite her family being at work, Cecilia navigates this challenge with ease. A gentle tap of her phone against the tags, and she hears, "Antibiotic, take with lunch," clearly distinguishing it from the other. Later, as she prepares her meal, EchoAid guides her again, confirming, "Salad mix, expires on Friday," ensuring her lunch is fresh and healthy. EchoAid not only grants Cecilia the freedom to manage her health independently but also supports her in making informed choices about her diet, all by herself.
 
