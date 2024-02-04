@@ -62,7 +62,7 @@ Here are EchoAid's main features:
 
 > This is where personalization meets technology. Users can record messages in their own voice or a loved one's, making each interaction not just informative but also familiar and comforting.
 
-**Step 3: Playback with the EchoTag App**
+**Step 3: Playback with the EchoAid App**
 
 > The magic happens with a simple touch. The NFC-enabled device becomes the user's ears, relaying crucial information through a system designed to minimize confusion and maximize autonomy.
 
