@@ -53,8 +53,8 @@ struct ContentView: View {
             messageDisplay
             actionButtons
 // comment out the message for test uses
-            Text(testMessage)
-                .foregroundColor(.red)
+//            Text(testMessage)
+//                .foregroundColor(.red)
         }
         .padding()
         .background(Color(hex: "70A9A1"))
